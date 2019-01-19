@@ -1,0 +1,50 @@
+<h1>{{ title }}</h1>
+
+<fieldset *ngIf="tasks.length > 0">
+    <legend>All Tasks</legend>
+    <table border=1 >
+        <tr>
+            <td>Title</td>
+            <td>Description</td>
+            <td>Status</td>
+            <td>Created At</td>
+            <td>Updated At</td>
+            <td>Delete?</td>
+            <td>Edit?</td>
+        </tr>
+        <tr *ngFor="let task of tasks">
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.myStatus }}</td>
+            <td>{{ task.createdAt | date:'medium' }}</td>
+            <td>{{ task.updatedAt | date:'medium' }}</td>
+            <td><button (click)="deleteTask(task._id)">Delete</button></td>
+            <td><button (click)="editTask(task._id)">Edit</button></td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset *ngIf="mode=='create'">
+    <legend>Create a task</legend>
+    <form (submit)="createTask()">
+        <p>Title: <input type="text" name="newTask.title" [(ngModel)]="newTask.title" /></p>
+        <p>Description: <input type="text" name="newTask.description" [(ngModel)]="newTask.description" /></p>
+        <input type="submit" value="Create Task" />
+    </form>
+</fieldset>
+
+<fieldset *ngIf="mode=='edit'">
+    <legend>Update {{ task.title }}</legend>
+    <form (submit)="updateTask(task._id)">
+        <p>Title: <input type="text" name="task.title" [(ngModel)]="task.title" /></p>
+        <p>Description: <input type="text" name="task.description" [(ngModel)]="task.description" /></p>
+        <p>Status: <select name="task.myStatus" [(ngModel)]="task.myStatus">
+            <option value="pending">pending</option>
+            <option>in progress</option>
+            <option>completed</option>
+            <option>cancelled</option>
+        </select></p>
+        <input type="submit" value="Update Task" />
+        <button (click)="changeMode('create')">Cancel</button>
+    </form>
+</fieldset>
